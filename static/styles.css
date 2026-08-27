@@ -1,0 +1,41 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.flex-container {
+    display: flex;
+    height: 100vh;
+    flex-direction: row;
+}
+.red {
+    background-color: red;
+}
+
+.blue {
+    background-color: blue;
+}
+
+.green {
+    background-color: green;
+}
+
+.col-left {
+    width: 10%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.col-right {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100vh;
+}
+
+.form-group {
+    display: flex;
+    padding: 20px;
+}

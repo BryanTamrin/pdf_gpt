@@ -8,9 +8,9 @@ def pdf_to_page():
     # check input
     if len(sys.argv) != 2:
             sys.exit("valid syntax = python main.py [filename]")
-        if not sys.argv[1].endswith(".pdf"):
+    if not sys.argv[1].endswith(".pdf"):
             sys.exit("file is not a pdf")
-        if not Path(sys.argv[1]).exists():
+    if not Path(sys.argv[1]).exists():
             sys.exit(f"{sys.argv[1]} does not exist")
     # read file
     reader = PdfReader(sys.argv[1])
