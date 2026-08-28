@@ -12,8 +12,8 @@ html, body {
     background-color: red;
 }
 
-.blue {
-    background-color: blue;
+.orange {
+    background-color: orange;
 }
 
 .green {
@@ -21,14 +21,14 @@ html, body {
 }
 
 .col-left {
-    width: 10%;
+    width: 20%;
     height: 100%;
     display: flex;
     flex-direction: column;
 }
 
 .col-right {
-    width: 90%;
+    width: 80%;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -39,3 +39,4 @@ html, body {
     display: flex;
     padding: 20px;
 }
+

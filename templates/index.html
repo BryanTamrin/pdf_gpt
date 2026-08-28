@@ -2,14 +2,25 @@
 
 {% block content %}
 <div class="flex-container red">
-  <div class="col-left blue">
+  <div class="col-left orange">
      PDF LIST
     <ul class="list-group list-group-flush">
-      <li class="list-group-item">An item</li>
-      <li class="list-group-item">A second item</li>
-      <li class="list-group-item">A third item</li>
-      <li class="list-group-item">A fourth item</li>
-      <li class="list-group-item">And a fifth one</li>
+      {% for pdf in pdfs %}
+        <li class="list-group-item">
+          {{ pdf }}
+          <form action="/delete" method="POST">
+            <input type="hidden" name="pdf_name" value="{{ pdf }}">
+            <button class="btn btn-danger btn-sm float-end" onclick="deletePDF('{{ pdf }}')">Delete</button>
+          </form>
+        </li>
+      {% endfor %}
+      <form action="/upload" method="POST" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label for="pdf_file" class="form-label">Upload PDF</label>
+        <input class="form-control" type="file" id="pdf_file" name="file" accept=".pdf">
+      </div>
+      <button type="submit" class="btn btn-light">Upload</button>
+      </form>
     </ul>
   </div>
   <div class="col-right green">
