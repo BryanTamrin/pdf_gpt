@@ -24,12 +24,39 @@
     </ul>
   </div>
   <div class="col-right green">
-    <form action="/ask" method="POST">
+    <div id="chat">
+      hi
+    </div>
+    <form action="/ask" class="ask-form" id="ask-form" method="POST">
       <div class="form-group">
-        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input">
+        <input type="text" class="form-control" name="question" id="question" placeholder="Type your question here...">
         <button type="submit">Ask</button>
       </div>
     </form>
   </div>
 </div>
+
+<script>
+
+const ask_form = document.getElementById("ask-form");
+const question = document.getElementById("question");
+const chat = document.getElementById("chat");
+
+ask_form.addEventListener("submit", async function(event) {
+  event.preventDefault();
+  const questionSentence = question.value;
+  const response = await fetch("/ask", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+  },
+    body: new URLSearchParams({ question: questionSentence })
+  });
+  const data = await response.json();
+  chat.innerHTML += '<p><strong>You:</strong> ' + questionSentence + '</p>';
+  chat.innerHTML += '<p><strong>PDF GPT:</strong> ' + data.answer + '</p>';
+  question.value = "";
+});
+
+</script>
 {% endblock %}

@@ -4,16 +4,12 @@ from pathlib import Path
 import ollama
 import chromadb
 
-def pdf_to_page():
-    # check input
-    if len(sys.argv) != 2:
-            sys.exit("valid syntax = python main.py [filename]")
-    if not sys.argv[1].endswith(".pdf"):
-            sys.exit("file is not a pdf")
-    if not Path(sys.argv[1]).exists():
-            sys.exit(f"{sys.argv[1]} does not exist")
+client = chromadb.PersistentClient(path="./chroma_db")
+collection = client.get_or_create_collection("pdf_gpt")
+
+def pdf_to_page(filename):
     # read file
-    reader = PdfReader(sys.argv[1])
+    reader = PdfReader(filename)
     extracted_page = []
     for page in reader.pages:
         text = (page.extract_text())
@@ -28,25 +24,23 @@ def page_to_embedding(extracted_page):
         page_embedding.append(response['embedding'])
     return page_embedding
 
-def add_database(extracted_page, page_embedding):
-    # add to chromadb database
-    client = chromadb.PersistentClient(path="./chroma_db")
-    collection = client.get_or_create_collection("pdf_gpt")
+def add_database(extracted_page, page_embedding, filename):
 
     for i, page in enumerate(extracted_page):
         n_of_page = i + 1
         collection.add(
             documents=[page],
-            ids=[f"{sys.argv[1]}_page_{n_of_page}"],
-            metadatas=[{"source": sys.argv[1], "page": n_of_page}],
+            ids=[f"{filename}_page_{n_of_page}"],
+            metadatas=[{"source": filename, "page": n_of_page}],
             embeddings=[page_embedding[i]]
             )
-def process_question():
-    # process user question
-    client = chromadb.PersistentClient(path="./chroma_db")
-    collection = client.get_or_create_collection("pdf_gpt")
 
-    question = input(f"\n What would you like to ask about {sys.argv[1]}? ")
+def delete_database(filename):
+    # delete from database
+    collection.delete(where={"source": filename})   
+
+def process_question(question):
+    # process user question
     question_embedding = ollama.embeddings(model="nomic-embed-text", prompt=question)["embedding"]
     results = collection.query(
         query_embeddings=[question_embedding],
